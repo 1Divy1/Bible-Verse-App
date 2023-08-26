@@ -13,7 +13,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Verse verse = Verse(bookName: '', chapter: 0, verse: 0, text: '');
+  Verse verse = Verse(bookName: '', chapter: 0, verse: 0, wordTileList: []);
 
   @override
   Widget build(BuildContext context) {
@@ -36,13 +36,13 @@ class _HomeScreenState extends State<HomeScreen> {
               // TODO: alege automat cartea, capitolul, si versetul in functie de dificultate
               onPressed: () async {
                 try {
-                  var tempValue = await ServerSide().getRandomVerse(0);
-                  Verse tempVerse = tempValue;
+                  // TODO: fa aici procesul de transformare in WordTile
+                  Verse tempVerse = await ServerSide().getRandomVerse(0);
 
                   setState(() => verse = tempVerse);
                 } 
                 catch (e) {
-                  print('exception $e');
+                  print('onPressed exception $e');
                 }
               },
               style: ElevatedButton.styleFrom(

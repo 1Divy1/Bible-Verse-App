@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:bible_app/components/verse_model.dart';
+import 'package:bible_app/components/word_tile.dart';
 import 'package:flutter/material.dart';
 
 class VerseContainer extends StatefulWidget {
@@ -17,19 +18,6 @@ class VerseContainer extends StatefulWidget {
 
 class _VerseContainerState extends State<VerseContainer> {
 
-  String extractWords(String sentence) {
-    List<String> words = sentence.split(' ');
-    int numOfWordsToModify = 1;
-    int randIndexToModify = Random().nextInt(words.length);
-
-    return words.join(' ');
-  }
-
-  showText() {
-    var words = extractWords(widget.verse.text);
-    return words;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -42,31 +30,11 @@ class _VerseContainerState extends State<VerseContainer> {
           borderRadius: BorderRadius.circular(20),
           color: Colors.green,
         ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Flexible(
-                child: Text(
-                  showText().toString(),
-                  strutStyle: const StrutStyle(height: 4),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              Text(
-                '${widget.verse.bookName} ${widget.verse.chapter} : ${widget.verse.verse}',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
+        child: ListView.builder(
+          itemCount: widget.verse.wordTileList.length,
+          itemBuilder: (BuildContext context, int index) {
+            return widget.verse.wordTileList[index];
+          },
         ),
       ),
     );
