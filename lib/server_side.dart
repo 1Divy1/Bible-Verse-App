@@ -363,7 +363,7 @@ class ServerSide {
   int chapter = 0;
   int verse = 0;
 
-  getRandomVerse(int difficulty /*to be implemented*/) async {
+  Future<Verse> getRandomVerse(int difficulty /*to be implemented*/) async {
 
     /* -- Alege o carte random din Noul Testament --
       creaza un index random de la 0 la lungimea listei NewTestamentBooks

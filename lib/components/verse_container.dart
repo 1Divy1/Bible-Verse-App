@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:bible_app/components/verse_model.dart';
 import 'package:bible_app/components/word_tile.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +16,6 @@ class VerseContainer extends StatefulWidget {
 }
 
 class _VerseContainerState extends State<VerseContainer> {
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -28,13 +26,13 @@ class _VerseContainerState extends State<VerseContainer> {
         height: 500,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: Colors.green,
+          color: Colors.transparent.withOpacity(0.2),
         ),
-        child: ListView.builder(
-          itemCount: widget.verse.wordTileList.length,
-          itemBuilder: (BuildContext context, int index) {
-            return widget.verse.wordTileList[index];
-          },
+        child: Wrap(
+          alignment: WrapAlignment.center,
+          spacing: 5,
+          runSpacing: 15,
+          children: widget.verse.wordTileList,
         ),
       ),
     );

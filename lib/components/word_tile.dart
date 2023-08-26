@@ -13,19 +13,20 @@ class WordTile extends StatefulWidget {
 }
 
 class _WordTileState extends State<WordTile> {
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 40,
-      height: 30,
+      padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Colors.blue,
       ),
       child: Text(
         widget.content,
-        style: TextStyle(color: Colors.white),
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 25,
+        ),
       ),
     );
   }
