@@ -16,7 +16,11 @@ class Verse {
   factory Verse.fromJson(Map<String, dynamic> json) {
     String text = json['text'];
     List<String> tempList = text.split(' ');
-    List<WordTile> tempWordTileList = List<WordTile>.from(tempList);
+    List<WordTile> tempWordTileList = [];
+
+    for (var item in tempList) {
+      tempWordTileList.add(WordTile(content: item));  
+    }    
 
     return Verse(
       bookName: json['book_name'],
