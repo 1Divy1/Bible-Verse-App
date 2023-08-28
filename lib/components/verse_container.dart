@@ -1,6 +1,4 @@
-import 'dart:math';
 import 'package:bible_app/components/verse_model.dart';
-import 'package:bible_app/components/word_tile.dart';
 import 'package:flutter/material.dart';
 
 class VerseContainer extends StatefulWidget {
@@ -23,16 +21,32 @@ class _VerseContainerState extends State<VerseContainer> {
       child: Container(
         padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
         width: double.infinity,
-        height: 500,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           color: Colors.transparent.withOpacity(0.2),
         ),
-        child: Wrap(
-          alignment: WrapAlignment.center,
-          spacing: 5,
-          runSpacing: 15,
-          children: widget.verse.wordTileList,
+        child: Column(
+          children: [
+            // versetul
+            SingleChildScrollView(
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 5,
+                runSpacing: 15,
+                children: widget.verse.wordTileList,
+              ),
+            ),
+            const SizedBox(height: 10),
+            // referinta
+            Text(
+              '${widget.verse.bookName} ${widget.verse.chapter} : ${widget.verse.verse}',
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 25,
+              ),
+            ),
+            const SizedBox(height: 10),
+          ],
         ),
       ),
     );

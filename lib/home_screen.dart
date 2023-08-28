@@ -1,32 +1,42 @@
 import 'package:bible_app/components/difficulty_item.dart';
 import 'package:bible_app/components/verse_container.dart';
 import 'package:bible_app/server_side.dart';
+import 'package:bible_app/shared.dart';
 import 'package:flutter/material.dart';
 import 'components/verse_model.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  HomeScreen({super.key});
+
+  late Verse verse = Verse(
+    bookName: '',
+    chapter: 0,
+    verse: 0,
+    removedWord: '',
+    tileIndexToModify: 0,
+    wordTileList: [],
+  );
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   getRandomVerse() async {
     try {
       // TODO: fa aici procesul de transformare in WordTile
       Verse tempVerse = await ServerSide().getRandomVerse(0);
       tempVerse.wordTileList.removeLast(); // scoate ultimul element
 
-      setState(() => verse = tempVerse);
+      setState(() {
+        //widget.verse = tempVerse;
+        globalVerse = tempVerse;
+      });
     } 
     catch (e) {
       print('onPressed exception $e');
     }
   }
-
-  Verse verse = Verse(bookName: '', chapter: 0, verse: 0, wordTileList: []);
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          // alege dificultatea (i.e. cate cuvinte sa lipseasca din verset)
           // TODO: de implementat
+          // alege dificultatea (i.e. cate cuvinte sa lipseasca din verset)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -44,7 +54,9 @@ class _HomeScreenState extends State<HomeScreen> {
               DifficultyItem(difficultyLevel: 'Greu', isSelected: false),
             ],
           ),
-          VerseContainer(verse: verse), // aici se afiseaza textul versetului
+          VerseContainer(
+              verse:
+                  globalVerse /*widget.verse*/), // aici se afiseaza textul versetului
           Transform.scale(
             // butonul care aduce un verset nou din baza de date (refresh)
             scale: 1.75,
