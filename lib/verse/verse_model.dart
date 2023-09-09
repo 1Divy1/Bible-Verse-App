@@ -1,6 +1,7 @@
 import 'package:bible_app/components/word_tile.dart';
+import 'package:flutter/material.dart';
 
-class Verse {
+class Verse with ChangeNotifier {
   String bookName;
   int chapter;
   int verse;
