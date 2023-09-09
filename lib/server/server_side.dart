@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
-import 'package:bible_app/shared.dart';
 import 'package:http/http.dart' as http;
-import 'components/verse_model.dart';
+import '../verse/verse_model.dart';
 
 class ServerSide {
   List<String> OldTestamentBooks = [
@@ -364,26 +363,22 @@ class ServerSide {
   int chapter = 0;
   int verse = 0;
 
-  Future<Verse> getRandomVerse(int difficulty /*to be implemented*/) async {
+  Future<Verse> getRandomVerse(/*int difficulty to be implemented*/) async {
+
     /* -- Alege o carte random din Noul Testament --
       creaza un index random de la 0 la lungimea listei NewTestamentBooks
       alege elementul care se afla la acel index 
     */
-    bookName = NewTestamentBooks.keys
-        .elementAt(random.nextInt(NewTestamentBooks.length));
+    bookName = NewTestamentBooks.keys.elementAt(random.nextInt(NewTestamentBooks.length));
 
     // alege un capitol random din cartea respectiva (de la 1 la cate capitole sunt in carte)
     chapter = random.nextInt(NewTestamentBooks[bookName]!.length) + 1;
 
     // alege un verset random din capitolul respectiv
-    verse = random
-                  .nextInt(NewTestamentBooks[bookName]!
-                  .elementAt(chapter - 1 < 0 ? 0 : chapter - 1)) + 1;
+    verse = random.nextInt(NewTestamentBooks[bookName]!.elementAt(chapter - 1 < 0 ? 0 : chapter - 1)) +1;
 
     // apelam server-ul
-    var verseText = await http.get(
-      Uri.parse('$baseUrl/$bookName $chapter:$verse?translation=rccv'),
-    );
+    var verseText = await http.get(Uri.parse('$baseUrl/$bookName $chapter:$verse?translation=rccv'));
 
     // decodam response-ul...
     const utf8decoder = Utf8Decoder();
@@ -392,20 +387,32 @@ class ServerSide {
 
     List<dynamic> verseData = jsonResponse['verses'];
 
-    //Verse globalVerse = Verse.fromJson(verseData[0]);
-    globalVerse = Verse.fromJson(verseData[0]);
+    Verse returnedVerse = Verse(
+      bookName: '',
+      chapter: 0,
+      verse: 0,
+      removedWord: '',
+      tileIndexToModify: 0,
+      wordTileList: [],
+    );
 
-    // alegem un index random din wordTileList 
-    int randTileIndexToRemove = Random().nextInt(globalVerse.wordTileList.length);
-    globalVerse.tileIndexToModify = randTileIndexToRemove;
+    //Verse globalVerse = Verse.fromJson(verseData[0]);
+    returnedVerse = Verse.fromJson(verseData[0]);
+
+    // alegem un index random din wordTileList
+    int randTileIndexToRemove = Random().nextInt(returnedVerse.wordTileList.length);
+    returnedVerse.tileIndexToModify = randTileIndexToRemove;
 
     // stocam cuvantul pe care-l ascundem
-    globalVerse.removedWord = globalVerse.wordTileList[randTileIndexToRemove].content;
-    print('removed word ${globalVerse.removedWord}');
+    returnedVerse.removedWord = returnedVerse.wordTileList[randTileIndexToRemove].content;
+    print('removed word ${returnedVerse.removedWord}');
 
     // si stergem textul din acel WordTile
-    globalVerse.wordTileList[randTileIndexToRemove].content = '______';
-    
-    return globalVerse;
+    returnedVerse.wordTileList[randTileIndexToRemove].content = '______';
+
+    // scoate ultimul cuvant
+    returnedVerse.wordTileList.removeLast(); 
+
+    return returnedVerse;
   }
 }
